@@ -12,4 +12,4 @@ pretty easy to make it a bash script to work elsewhere.
 
 You can test the provided bot using:
 
-    java -jar engine/Tron.jar maps/empty-room.txt "./clj.bat bot.clj" "./clj.bat bot.clj"
+    java -jar engine/Tron.jar maps/empty-room.txt "./clj.bat MyTronBot.clj" "./clj.bat MyTronBot.clj"
