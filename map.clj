@@ -62,8 +62,7 @@
 
 (defn check-line-length [x y]
   (when-not (= x @width)
-    (error "Invalid line length: " x " at line " y " should be " @width)
-    (exit 1)))
+    (error "Invalid line length: " x " at line " y " should be " @width)))
 
 (defn check-player-found [players-found key]
   (when (players-found key)
@@ -77,38 +76,42 @@
   (when-not (= n (* @width @height))
     (error "Wrong number of spaces in the map.")))
 
-(defn initialize []
-  (let [read #(.read *in*)
-        first-line (.trim (read-line))
+(defn parse-first-line []
+  (let [first-line (.trim (read-line))
         tokens (seq (.split first-line " "))]
     (check-game-over first-line)
     (check-first-line first-line)
-    (apply init-map (map parse-int tokens))
-    (try
-     (loop [x 0 y 0
-            players-found {}
-            number-of-spaces 0]
-       (if (>= y @height)
-         (do (check-spaces-read number-of-spaces)
-             (check-player-missing players-found \1)
-             (check-player-missing players-found \2))
-         (let [c (read)]
-           (condp = (char c)
-             \newline (do (check-line-length x y)
-                          (recur 0 (inc y) players-found number-of-spaces))
-             \return  (recur x y players-found number-of-spaces)
-             \space   (recur (inc x) y players-found (inc number-of-spaces))
-             \#       (do (set-wall x y)
-                          (recur (inc x) y players-found (inc number-of-spaces)))
-             \1       (do (check-player-found players-found \1)
-                          (set-player 0 x y)
-                          (recur (inc x) y (assoc players-found \1 true) (inc number-of-spaces)))
-             \2       (do (check-player-found players-found \2)
-                          (set-player 1 x y)
-                          (recur (inc x) y (assoc players-found \2 true) (inc number-of-spaces)))
-             (if (< c 0)
-               (recur x y players-found number-of-spaces)
-               (error "Invalid character received: " (char c))))))))))
+    (apply init-map (map parse-int tokens))))
+
+(defn initialize []
+  (try
+   (parse-first-line)
+   (loop [x 0 y 0
+          players-found {}
+          number-of-spaces 0]
+     (if (>= y @height)
+       (do (check-spaces-read number-of-spaces)
+           (check-player-missing players-found \1)
+           (check-player-missing players-found \2))
+       (let [read #(.read *in*)
+             c (read)]
+         (condp = (char c)
+           \newline (do (check-line-length x y)
+                        (recur 0 (inc y) players-found number-of-spaces))
+           \return  (recur x y players-found number-of-spaces)
+           \space   (recur (inc x) y players-found (inc number-of-spaces))
+           \#       (do (set-wall x y)
+                        (recur (inc x) y players-found (inc number-of-spaces)))
+           \1       (do (check-player-found players-found \1)
+                        (set-player 0 x y)
+                        (recur (inc x) y (assoc players-found \1 true) (inc number-of-spaces)))
+           \2       (do (check-player-found players-found \2)
+                        (set-player 1 x y)
+                        (recur (inc x) y (assoc players-found \2 true) (inc number-of-spaces)))
+           (if (< c 0)
+             (recur x y players-found number-of-spaces)
+             (error "Invalid character received: " (char c)))))))
+   (catch Exception e (error "Unknown exeption: " e))))
 
 (defn make-move [direction]
   (println (directions direction))
