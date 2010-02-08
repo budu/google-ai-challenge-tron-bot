@@ -109,7 +109,8 @@
              \2       (do (check-player-found players-found \2)
                           (set-player 1 x y)
                           (recur (inc x) y (assoc players-found \2 true) (inc number-of-spaces)))
-             (when (> c -1)
+             (if (< c 0)
+               (exit 0)
                (error "Invalid character received: " (char c)))))))
      (catch Exception e (error "Unknown exeption: " e)))))
 
