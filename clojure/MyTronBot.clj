@@ -2,7 +2,9 @@
 ;;
 ;;  by Nicolas Buduroi
 
-(load "map")
+(ns MyTronBot
+  (:gen-class)
+  (:use map))
 
 (defn valid-moves [x y]
   [(when-not (wall? x (- y 1)) :north)
@@ -29,4 +31,8 @@
     (make-move (next-move))
     (recur)))
 
-(game-loop)
+(defn -main []
+  (game-loop))
+
+(when *command-line-args*
+  (-main))

@@ -2,6 +2,8 @@
 ;;
 ;;  translated from the Java version by Nicolas Buduroi
 
+(ns map)
+
 (def width (ref 0))
 (def height (ref 0))
 (def walls (ref nil))
