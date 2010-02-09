@@ -10,6 +10,29 @@ To make it work you'll have to add a jar of Clojure 1.1 (not tested with
 with the included clj.bat under Cygwin in Windows XP, it should be
 pretty easy to make it a bash script to work elsewhere.
 
-You can test the provided bot using:
+## Running as a Script
 
-    java -jar engine/Tron.jar maps/empty-room.txt "./clj.bat MyTronBot.clj" "./clj.bat MyTronBot.clj"
+To see if your setup works, run this command:
+
+    $ java -cp "deps/clojure.jar;." clojure.main MyTronBot.clj -- < maps/empty-room.txt
+
+You can test the sample bot using the provided batch file like this:
+
+    $ java -jar engine/Tron.jar maps/empty-room.txt "./clj.bat MyTronBot.clj" "./clj.bat MyTronBot.clj"
+
+## Compiling    
+
+To compile the sample bot, you'll need first to create a directory for
+the generated classes. Then it's a simple matter of calling compile:
+
+    $ mkdir classes
+    $ java -cp "deps/clojure.jar;.;classes" clojure.main -e "(compile 'MyTronBot)
+    MyTronBot
+
+After that, it's exactly like running Java classes:
+
+    $ java -cp "deps/clojure.jar;classes" MyTronBot < maps/empty-room.txt
+
+I've also provided a batch file to run the class version:    
+    
+    $ java -jar engine/Tron.jar maps/empty-room.txt "./class.bat MyTronBot" "./class.bat MyTronBot"
