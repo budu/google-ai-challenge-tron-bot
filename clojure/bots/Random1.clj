@@ -1,17 +1,17 @@
-;; Random Bot #2 =======================================================
+;; Random Bot #1 =======================================================
 ;;
 ;;  by Nicolas Buduroi
 
 (use 'map)
 
-(defn valid?
-  ([dir] (apply valid? dir (you)))
-  ([dir x y]
-     (not (condp = dir
-            :north (wall? x (- y 1))
-            :east  (wall? (+ x 1) y)
-            :south (wall? x (+ y 1))
-            :west  (wall? (- x 1) y)))))
+(defn valid-moves [x y]
+  [(when-not (wall? x (- y 1)) :north)
+   (when-not (wall? (+ x 1) y) :east)
+   (when-not (wall? x (+ y 1)) :south)
+   (when-not (wall? (- x 1) y) :west)])
+
+(defn compact [coll]
+  (filter identity coll))
 
 (defn choose-at-random [coll]
   (let [size (count coll)]
@@ -20,7 +20,8 @@
 
 (defn next-move []
   (choose-at-random
-   (filter valid? [:north :east :south :west])))
+   (compact
+    (apply valid-moves (you)))))
 
 ;; Game Loop ===========================================================
 
