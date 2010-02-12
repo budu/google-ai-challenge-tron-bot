@@ -1,2 +1,2 @@
 #!/bin/bash
-zip my_bot clojure/*.clj
+zip entry clojure/*.clj
