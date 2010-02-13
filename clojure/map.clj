@@ -18,11 +18,13 @@
    (ref-set height h)
    (ref-set walls {})))
 
-(defn wall? [x y]
-  (if (or (< x 0) (< y 0)
-          (>= x @width) (>= y @height))
-    true
-    (@walls (point x y))))
+(defn wall?
+  ([p] (apply wall? p))
+  ([x y]
+     (if (or (< x 0) (< y 0)
+             (>= x @width) (>= y @height))
+       true
+       (@walls (point x y)))))
 
 (defn set-wall [x y]
   (dosync (alter walls assoc (point x y) true)))
