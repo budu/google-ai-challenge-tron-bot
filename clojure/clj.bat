@@ -1,1 +1,1 @@
-@java -cp "deps/clojure.jar;." clojure.main %1 --
+@java -Xbootclasspath/a:deps/clojure.jar -cp . clojure.main %1 --
